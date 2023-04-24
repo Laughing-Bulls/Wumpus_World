@@ -3,15 +3,15 @@ move(NewX, NewY) :-
            is_adjacent(NewX, NewY),
            retract(current_room(_,_)),       % retract old position
            assert(current_room(NewX, NewY)),        % assert new position
-           change_score(-1),
            format("New coordinates: (~w, ~w)~n", [NewX, NewY]),
+           change_score(-1),
            assess.
 
 backtrack(room(NewX, NewY)) :-                    % go back through a safe square
            retract(current_room(_,_)),           % retract old position
            assert(current_room(NewX, NewY)),     % assert new position
-           change_score(-1),
-           format("Backtrack to room: (~w, ~w)~n", [NewX, NewY]).
+           format("Backtrack to room: (~w, ~w)~n", [NewX, NewY]),
+           change_score(-1).
 
 travel_to(Destination) :-
      here(Current_room),
