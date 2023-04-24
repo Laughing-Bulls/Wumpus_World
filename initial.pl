@@ -15,7 +15,10 @@
 :- dynamic remaining/1.
 
 /* BOARD SIZE */
-board_size(4).
+board_size(4).      % set at 4x4
+
+/* INITIAL PROBABILITY OF PIT */
+pit_placement_prob(0.20).   % set at 20%
 
 /* SETUP ROOMS IN MAZE */
 assert_rooms :-
@@ -30,7 +33,12 @@ assert_rooms([Room|Rest]) :-
     
 /* INITIALIZE ROOM RISKS AT A LOW, NON-ZERO VALUE*/
 init_room_risk :-            % room_risk(Room, Pit, Wumpus)
-    forall(room(X, Y), assertz(room_risk(room(X, Y), 0.01, 0.01))).
+    % pit is 20% probability. Wumput is 1/(sqr(MAX)-1)
+    pit_placement_prob(Pit_prob),
+    board_size(Max),
+    Max_sqaured_minus_one is (Max * Max) - 1,
+    Wumpus_prob is 1 / Max_sqaured_minus_one
+    forall(room(X, Y), assertz(room_risk(room(X, Y), Pit_prob, Wumpus_prob))).
     
     
 /* WUMPUS POSITION */
@@ -65,10 +73,12 @@ gold_room :-
 
 /* PIT POSITIONS */
 dig_pits :-
+         pit_placement_prob(Pit_prob),
+         Pit_prob_in_percent is Pit_prob *100,
          assertz(pits([])),
          forall(
          (room(X, Y), \+ gold(X, Y), \+ wumpus(X, Y), \+ initial_room(X, Y)),
-         (random(0, 100, N), N < 20 ->
+         (random(0, 100, N), N < Pit_prob_in_percent ->
                   assert(pit(X, Y)),
                   add_pit(X, Y),
                   format("A pit is in room: (~w, ~w)~n", [X, Y])
