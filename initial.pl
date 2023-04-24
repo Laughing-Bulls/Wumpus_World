@@ -37,7 +37,7 @@ init_room_risk :-            % room_risk(Room, Pit, Wumpus)
     pit_placement_prob(Pit_prob),
     board_size(Max),
     Max_sqaured_minus_one is (Max * Max) - 1,
-    Wumpus_prob is 1 / Max_sqaured_minus_one
+    Wumpus_prob is 1 / Max_sqaured_minus_one,
     forall(room(X, Y), assertz(room_risk(room(X, Y), Pit_prob, Wumpus_prob))).
     
     
