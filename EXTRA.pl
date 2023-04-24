@@ -4,15 +4,16 @@
 danger(X,Y) :- pit(X,Y); wumpus(X,Y).
 
 
-/* UPDATE COST OF REMAINING PATH */
+/* INITIALIZE AGENT */
 initialize_agent :-  % initialize to the value of the unvisited squares
-                     assert(safe([])),          % initialize safe room list
-                     assert(remaining(0)),      % initialize # remaining rooms
-                     board_size(Max),
-                     Initial_unvisited is -Max * Max + 1,
-                     update_remaining(Initial_unvisited),
-                     format("Agent is initialized ~n").
+       assert(remaining(0)),      % initialize # remaining rooms
+       board_size(Max),
+       Initial_unvisited is -Max * Max + 1,
+       update_remaining(Initial_unvisited),
+       format("Agent is initialized ~n").
 
+
+/* UPDATE COST OF REMAINING PATH */
 update_remaining(Change) :-
                     remaining(Current),
                     New is Current - Change,
