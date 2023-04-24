@@ -32,7 +32,7 @@ get_gold :-
      current_room(X,Y),
      glitter(X,Y),                           % check room for gold
      format("You got the gold in room (~w, ~w)! ~n", [X, Y]),
-     (gold_there -> change_score(100) ; true), % points for getting the gold if there
+     (gold_there -> change_score(1000) ; true), % points for getting the gold if there
      retract(gold_there),
      assert(gold_there(false)),
      initial_room(Xf, Yf),
@@ -51,7 +51,7 @@ die :-
      current_room(X,Y),
      (die_by_wumpus(X,Y); die_by_pit(X,Y)),       % check room for pit or wumpus
      format("You died in room (~w, ~w)! ~n", [X, Y]),
-     change_score(-100),
+     change_score(-1000),
      halt(0).       % End game
 
 die_by_wumpus(X, Y) :-
